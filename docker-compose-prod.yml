@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  node:
+    container_name: node-prod
+    build:
+      context: ./app
+      dockerfile: DockerfileProdApp
+    image: knbase-node-prod
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    # volumes:
+    #   - ./app:/usr/src/app
+    ports:
+      - ${APP_PORT:-8080}:8080
+    restart: always
+  front:
+    container_name: front-prod
+    build:
+      context: ./front
+      dockerfile: DockerfileProdFront
+    image: knbase-front-prod
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - ${APP_PORT:-80}:80
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-prod:/data/db
+
+volumes:
+  mongodb-prod:
+    driver: local
