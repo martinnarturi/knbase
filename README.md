@@ -8,7 +8,7 @@
 ## Setup local dev:
 - clone the repo
 - add .env file to app/ and front/
-- docker compose -f docker-compose-prod.yml up -d
+- docker compose -f docker-compose.yml up -d
 
 front .env/.env-prod file example:
 VITE_API_URL=localhost
