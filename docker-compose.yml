@@ -16,7 +16,19 @@ services:
       - 27017:27017
     volumes:
       - mongodb:/data/db
-
+  front:
+    container_name: front-dev
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    image: knbase-front-dev
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - ./front:/app
+    ports:
+      - ${APP_FRONT_PORT:-5173}:5173
+    tty: true
 volumes:
   mongodb:
     driver: local

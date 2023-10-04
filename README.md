@@ -11,12 +11,12 @@
 - docker compose -f docker-compose.yml up -d
 
 front .env/.env-prod file example:
-VITE_API_URL=localhost
-VITE_API_PORT=8080
-VITE_API_PROTOCOL=http
+- VITE_API_URL=localhost
+- VITE_API_PORT=8080
+- VITE_API_PROTOCOL=http
 
 app .env/.env-prod file example:
-APP_PORT=8080
-FRONTEND_HOST=localhost
-FRONTEND_PORT=80
-FRONTEND_PROTOCOL=http
+- APP_PORT=8080
+- FRONTEND_HOST=localhost
+- FRONTEND_PORT=80
+- FRONTEND_PROTOCOL=http
