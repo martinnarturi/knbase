@@ -3,6 +3,7 @@
 ## Setup production project:
 - clone the repo
 - add .env-prod file to app/ and front/
+- adjust docker-compose-prod.yml file to your environment (network, ports, etc.)
 - docker compose -f docker-compose-prod.yml up -d
 
 ## Setup local dev:
