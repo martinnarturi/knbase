@@ -6,7 +6,7 @@ const saltRounds = 10;
 const passport = require('passport');
 const jwt = require('jsonwebtoken')
 const { jwtSecret } = require('../config/jwt.js');
-const maxAge = 24 * 3600;
+const maxAge = 10 * 365 * 24 * 3600;
 
 router.post('/create', async(req, res) => {
   let { name, pass } = req.body;

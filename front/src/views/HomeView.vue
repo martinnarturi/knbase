@@ -72,6 +72,10 @@ function load(item: {content: string; tags: Array<string>, _id: string}) {
   content.value = item.content
   tags.value = item.tags.join(';')
   id.value = item._id
+  setTimeout(function(){
+    let element = document.getElementById('kncontent')
+    element.style.height = element.scrollHeight + "px"
+  }, 0)
 }
 
 function cleanForm() {
@@ -322,7 +326,7 @@ onMounted(function() {
         </dialog>
       </div>
     </div>
-    <textarea style="width:100%" placeholder="content" type="text" v-model="content"></textarea><br/>
+    <textarea style="width:100%" placeholder="content" type="text" v-model="content" id="kncontent"></textarea><br/>
     <input @keyup.enter="id == '' ? add() : update()" style="width:100%" placeholder="tags ( ; separated)" type="text" v-model="tags" /><br/>
     <button v-if="id == ''" class="btn" @click="add">Add</button>
     <template v-else>
