@@ -43,12 +43,13 @@ router.get('/search', passport.authenticate('user-jwt-auth', { session:false }),
   q = q.replaceAll(';', '|')
   qAnd = q.split('^')
 
-  let tagsCondition = qAnd.map(function(el) { return {tags: {"$regex": RegExp(el,"i") }} } )
   let result
+
   try {
+    let tagsCondition = qAnd.map(function(el) { return {tags: {"$regex": RegExp(el,"i") }} } )
     result = await KnPiece.find( {$and: tagsCondition, kbCode, isDeleted: false }).exec();
   } catch(e) {
-    result = []
+    return res.status(500).json(e.message);
   }
 
   return res.status(200).json({
