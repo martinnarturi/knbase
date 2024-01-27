@@ -1,9 +1,9 @@
 <script setup lang="ts">
+
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 axios.defaults.withCredentials = true;
 import { ref, onMounted } from 'vue'
-import process from 'process';
 
 const router = useRouter();
 
@@ -22,6 +22,7 @@ const userPass = ref('');
 const loggedInUser = ref({});
 const connectedToKb = ref({});
 const apiUrl = import.meta.env.VITE_API_PROTOCOL + "://" + import.meta.env.VITE_API_URL + (import.meta.env.VITE_API_PORT ? ":" + import.meta.env.VITE_API_PORT : "")
+const kbListConnectedTo = ref([])
 
 // function navigate() {
 //   router.push({name: 'main', path: '/main'})
@@ -43,6 +44,9 @@ function search() {
   axios.get(apiUrl + '/search', { params: { q: searchText.value }})
   .then(function(result) {
     searchResult.value = result.data.result
+  })
+  .catch(function(err) {
+    alert(err.response.data)
   })
 }
 
@@ -132,14 +136,49 @@ function connectToKb() {
 
   axios.post(apiUrl + '/kb/connect', { code: kbCode.value, pass: kbPass.value })
   .then(function(response) {
+    connectedToKb.value = response.data.knBase ?? {}
+
+    if("name" in connectedToKb.value) {
+      let valueToSave = JSON.parse(JSON.stringify(connectedToKb.value))
+      valueToSave.code = kbCode.value
+      addKbToConnectedKbList(valueToSave)
+    }
+
     kbCode.value = ''
     kbPass.value = ''
-    connectedToKb.value = response.data.knBase ?? {}
+
     closeConnectDialog()
   })
   .catch(function(err) {
     alert(err.response.data)
   })
+}
+
+function getConnectedKbList() {
+  let connectedKbsListCookie = getCookie("connectedKbsList")
+  let connectedKbsList = []
+
+  if(connectedKbsListCookie) {
+    connectedKbsList = JSON.parse(connectedKbsListCookie)
+  }
+
+  return connectedKbsList;
+}
+
+function addKbToConnectedKbList(kbObj: Object) {
+  let connectedKbsList = getConnectedKbList()
+
+  connectedKbsList.push(kbObj)
+
+  let unique: any = {}
+  connectedKbsList.forEach(function(el: any) {
+    unique[el.code] = el
+  })
+  connectedKbsList = Object.values(unique)
+
+  setCookie('connectedKbsList', JSON.stringify(connectedKbsList), 365)
+
+  kbListConnectedTo.value = getConnectedKbList()
 }
 
 function showLoginDialog() {
@@ -262,6 +301,7 @@ onMounted(function() {
   let darkModeSetup = getCookie('theme')
   theme.value = darkModeSetup != '' ? darkModeSetup : 'light'
   darkModeEnable(darkModeSetup == 'dark')
+  kbListConnectedTo.value = getConnectedKbList()
 });
 
 </script>
@@ -301,7 +341,10 @@ onMounted(function() {
         </div>
         <dialog id="connectDialog" style="text-align:left;">
           <h5 style="font-weight:700">Connect to new kb</h5>
-          <input type="text" placeholder="kb-code" v-model="kbCode"/>
+          <input type="text" placeholder="kb-code" list="kb-code" v-model="kbCode"/>
+          <datalist v-if="kbListConnectedTo.length > 0" id="kb-code">
+            <option v-for="kbListItem in kbListConnectedTo" :value="kbListItem.code">{{ kbListItem.name }}</option>
+          </datalist>
           <input type="password" placeholder="kb-pass" v-model="kbPass"/>
           <button style="margin-right: 10px" @click="connectToKb">Connect</button>
           <button @click="closeConnectDialog">Cancel</button>
