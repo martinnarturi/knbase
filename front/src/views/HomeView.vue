@@ -365,16 +365,16 @@ onMounted(function() {
                 </ul>
               </li>
               <li>Update documents
-                <ul>
+                <ol>
                   <li>On a searched document, hit "load"</li>
                   <li>Update as needed and hit "Update"</li>
                   <li>To abort update, hit "Back to add" next to document id</li>
-                </ul>
+                </ol>
               </li>
               <li>Delete documents
-                <ul>
-                  <li>On a searched document, hit "delete"</li>
-                </ul>
+                <ol>
+                  <li>On a searched document, hit "delete" and accept</li>
+                </ol>
               </li>
             </ul>
           </div>
