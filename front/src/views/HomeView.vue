@@ -362,6 +362,7 @@ onMounted(function() {
                 <ul>
                   <li>Search is done by tag</li>
                   <li>Use ; as "or" and ^ as "and" operator between tags</li>
+                  <li>Search can be done by regex match. Search for .* to retrieve all documents.</li>
                 </ul>
               </li>
               <li>Update documents
