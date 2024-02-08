@@ -295,6 +295,14 @@ function getCookie(cname: string) {
   return "";
 }
 
+function showInfo() {
+  document.getElementById("infoDialog").showModal()
+}
+
+function closeInfo() {
+  document.getElementById("infoDialog").close()
+}
+
 onMounted(function() {
   getUserData()
   getKbData()
@@ -313,6 +321,65 @@ onMounted(function() {
         <h5 style="font-weight:700">Knowledge base</h5>
       </div>
       <div style="width:80%; display: inline-block; text-align: right">
+        <a href="#" @click="showInfo" style="margin-right:5px">
+          <span>&#9432;</span>
+        </a>
+        <dialog id="infoDialog" style="text-align:left; overflow-y:auto">
+          <h5 style="font-weight:700">How to use</h5>
+          <div style="font-size: 12px">
+            <ul style="padding-inline-start: 20px">
+              <li>Create a user/login:
+                <ol>
+                  <li>Click on "Log in"</li>
+                  <li>Enter user-name and user-pass</li>
+                  <li>Click on "Create new user" or "Login"</li>
+                </ol>
+              </li>
+              <li>Create a database:
+                <ol>
+                  <li>Click on "Connect to kb"</li>
+                  <li>Click on "Create new kb"</li>
+                  <li>Enter kb name and hit "Create"</li>
+                  <li>Save kb passwords in a safe place</li>
+                  <li>To share the kb with someone else, just share the kb-code and kb-pass</li>
+                </ol>
+              </li>
+              <li>Connect to a database:
+                <ol>
+                  <li>Click on "Connect to kb"</li>
+                  <li>Enter kb-code and kb-pass</li>
+                  <li>Click on connect</li>
+                </ol>
+              </li>
+              <li>Create documents
+                <ol>
+                  <li>Enter content</li>
+                  <li>Enter tags (separated by ";")</li>
+                  <li>Hit "Add"</li>
+                </ol>
+              </li>
+              <li>Search documents
+                <ul>
+                  <li>Search is done by tag</li>
+                  <li>Use ; as "or" and ^ as "and" operator between tags</li>
+                </ul>
+              </li>
+              <li>Update documents
+                <ul>
+                  <li>On a searched document, hit "load"</li>
+                  <li>Update as needed and hit "Update"</li>
+                  <li>To abort update, hit "Back to add" next to document id</li>
+                </ul>
+              </li>
+              <li>Delete documents
+                <ul>
+                  <li>On a searched document, hit "delete"</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <button @click="closeInfo()">Close</button>
+        </dialog>
         <a href="#" @click="darkModeToggle" style="margin-right: 10px">
           <span v-if="theme == 'light'">&#127769;</span>
           <span v-else>🔆</span>
@@ -343,7 +410,7 @@ onMounted(function() {
           <h5 style="font-weight:700">Connect to new kb</h5>
           <input type="text" placeholder="kb-code" list="kb-code" v-model="kbCode"/>
           <datalist v-if="kbListConnectedTo.length > 0" id="kb-code">
-            <option v-for="kbListItem in kbListConnectedTo" :value="kbListItem.code">{{ kbListItem.name }}</option>
+            <option v-for="kbListItem in kbListConnectedTo" :value="kbListItem.code" :key="kbListItem.code">{{ kbListItem.name }}</option>
           </datalist>
           <input type="password" placeholder="kb-pass" v-model="kbPass"/>
           <button style="margin-right: 10px" @click="connectToKb">Connect</button>
